@@ -88,6 +88,12 @@
   </main>
 
   <script>
+    class CustomError extends Error {
+      constructor(message) {
+        super(message);
+        this.name = "CustomError";
+      }
+    }
     let form = document.querySelector('form');
     form.addEventListener('submit', e => {
       e.preventDefault();
@@ -95,13 +101,84 @@
       let firstNum = document.querySelector('#first-num').value;
       let secondNum = document.querySelector('#second-num').value;
       let operator = document.querySelector('#operator').value;
-      output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
+      try {
+        output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
+      }
+      catch(error) {
+       throw new CustomError('This is our custom error');
+      }
+      finally{
+        console.log('Done');
+      }
     });
 
     let errorBtns = Array.from(document.querySelectorAll('#error-btns > button'));
 
     // Start your code here
     // You may move this JS to another file if you wish
+    for(let i = 0; i < errorBtns.length; ++i){
+      errorBtns[i].addEventListener("click", () => {
+        if(errorBtns[i].textContent == "Console Log"){
+          console.log("Console Log Demo");
+        }
+        else if(errorBtns[i].textContent == "Console Error"){
+           console.error("Console Error Demo");
+        }
+        else if(errorBtns[i].textContent == "Console Count"){
+          console.count("Count Button");
+
+        }
+        else if(errorBtns[i].textContent == "Console Warn"){
+          console.warn("Console Warn Button");
+
+        }
+        else if(errorBtns[i].textContent == "Console Assert"){
+          const obj = {'number':2, 'errorMsg':'The number does not equal 3'}
+          console.assert(obj['number'] == 3, obj);
+        }
+        else if(errorBtns[i].textContent == "Console Clear"){
+          console.clear();
+        }
+        else if(errorBtns[i].textContent == "Console Dir"){
+          console.dir(errorBtns[i]);
+        }
+        else if(errorBtns[i].textContent == "Console dirxml"){
+          console.dirxml(errorBtns[i]);
+        }
+        else if(errorBtns[i].textContent == "Console Group Start"){
+          console.group('console.group');
+        }
+        else if(errorBtns[i].textContent == "Console Group End"){
+          console.groupEnd('console.group');
+        }
+        else if(errorBtns[i].textContent == "Console Table"){
+          console.table([{name:'Software Engineering', num:110},{name:'Programming languages',num:130,},{name:'Advanced Software Engineering',num:112}]);
+        }
+        else if(errorBtns[i].textContent == "Start Timer"){
+          console.time('Timer Button');
+        }
+        else if(errorBtns[i].textContent == "End Timer"){
+          console.timeEnd('Timer Button');
+        }
+        else if(errorBtns[i].textContent == "Console Trace"){
+          const deep = () => { deeper(); };
+          const deeper = () => { deepest(); };
+          const deepest = () => { console.trace(); };
+          deep();
+        }
+        else{
+          try {
+            boom()
+          } catch (error) {
+            console.log('Sadly an error happened my friend'); 
+          }
+        }
+    })};
+
+    window.addEventListener('error', (event) => {
+      console.error(event);
+    });
+
   </script>
 </body>
 
