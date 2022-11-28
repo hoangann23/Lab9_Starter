@@ -86,14 +86,26 @@
       <button>Trigger a Global Error</button>
     </section>
   </main>
-
+  <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
   <script>
+    window.TrackJS && TrackJS.install({ 
+      token: "3ab44f0f02904206b15a0ea95cb086cb"
+      // for more configuration options, see https://docs.trackjs.com
+    });
+  </script>            
+  <script>
+    TrackJS.track('Testing TrackJS!');               
     class CustomError extends Error {
       constructor(message) {
         super(message);
         this.name = "CustomError";
       }
     }
+
+    window.onerror = (event, source, lineno, colno, error) => {
+      console.log('Sadly an error happened my friend'); 
+    };
+
     let form = document.querySelector('form');
     form.addEventListener('submit', e => {
       e.preventDefault();
@@ -108,7 +120,7 @@
        throw new CustomError('This is our custom error');
       }
       finally{
-        console.log('Done');
+        console.log('Finally');
       }
     });
 
@@ -167,17 +179,9 @@
           deep();
         }
         else{
-          try {
-            boom()
-          } catch (error) {
-            console.log('Sadly an error happened my friend'); 
-          }
+          boom()
         }
     })};
-
-    window.addEventListener('error', (event) => {
-      console.error(event);
-    });
 
   </script>
 </body>
